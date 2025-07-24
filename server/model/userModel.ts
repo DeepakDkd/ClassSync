@@ -1,18 +1,19 @@
-import { Model, DataTypes, Sequelize } from "sequelize";
-import { IUser } from "../types/user";
+import { Model, DataTypes, Sequelize, DataTypeAbstract } from "sequelize";
+import { IUser } from "../types/user.d";
 import bcrypt from "bcrypt";
+import { sequelize } from "../config/db";
 
 class User extends Model<IUser> implements IUser {
   public id!: string;
   public email!: string;
   public password!: string;
-  public userName?: string;
+  // public userName?: string;
   public firstName?: string;
   public lastName?: string;
   public name?: string;
   public role?: string;
   public classRoomId?: string;
-  public classRoomName?: string;
+  public refreshToken?: string;
   public lastLoginAt?: Date;
   public isActive?: boolean;
   public profilePictureUrl?: string;
@@ -20,17 +21,18 @@ class User extends Model<IUser> implements IUser {
   public preferences?: Record<string, any>;
   public socialLinks?: Record<string, string>;
 
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public async isValidPassword(password: string): Promise<boolean> {
+    return bcrypt.compare(password, this.password);
+  }
 }
 
 export const initUserModel = (sequelize: Sequelize) => {
   User.init(
     {
       id: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
         primaryKey: true,
-        allowNull: false,
+        defaultValue: DataTypes.UUIDV4,
       },
       email: {
         type: DataTypes.STRING,
@@ -41,9 +43,11 @@ export const initUserModel = (sequelize: Sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      userName: {
-        type: DataTypes.STRING,
-      },
+      // userName: {
+      //   type: DataTypes.STRING,
+      //   allowNull: false,
+      //   unique: true,
+      // },
       firstName: {
         type: DataTypes.STRING,
       },
@@ -57,7 +61,7 @@ export const initUserModel = (sequelize: Sequelize) => {
       classRoomId: {
         type: DataTypes.STRING,
       },
-      classRoomName: {
+      refreshToken: {
         type: DataTypes.STRING,
       },
       lastLoginAt: {
@@ -91,16 +95,25 @@ export const initUserModel = (sequelize: Sequelize) => {
             user.password = await bcrypt.hash(user.password, 10);
           }
         },
+        beforeUpdate: async (user: User) => {
+          if (user.changed("password") && user.password) {
+            user.password = await bcrypt.hash(user.password, 10);
+          }
+        },
       },
     }
   );
-
   return User;
 };
 
 export const associateUserModel = (models: any) => {
+  User.belongsTo(models.JoinRequest, {
+    foreignKey: "userId",
+    as: "joinRequests",
+    onDelete: "SET NULL",
+  });
   User.belongsTo(models.ClassRoom, {
-    foreignKey: "classRoomId",
-    as: "classRoom",
+    foreignKey: "createdBy",
+    as:"creator",
   });
 };

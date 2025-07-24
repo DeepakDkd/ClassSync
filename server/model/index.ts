@@ -1,9 +1,11 @@
 import { sequelize } from "../config/db";
 import { associateUserModel, initUserModel } from "./userModel";
+import { associateClassRoomModel, initClassRoomModel } from "./classRoomModel";
 
 const db = {
   sequelize,
   User: initUserModel(sequelize),
+  ClassRoom: initClassRoomModel(sequelize),
 };
 
 sequelize
@@ -16,5 +18,6 @@ sequelize
   });
 
 associateUserModel(db);
+associateClassRoomModel(db);
 
 export default db;

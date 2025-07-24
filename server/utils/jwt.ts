@@ -1,11 +1,14 @@
 import jwt from "jsonwebtoken";
+import db from "../model";
 
 export const generateAccessToken = (userId: string): string => {
   const secretKey = process.env.ACCESS_TOKEN_SECRET;
   if (!secretKey) {
     throw new Error("JWT secret key is not defined");
   }
-  return jwt.sign({ userId }, secretKey, { expiresIn: "1d" });
+  const accessToken = jwt.sign({ userId }, secretKey, { expiresIn: "1d" });
+
+  return accessToken;
 };
 
 export const generateRefreshToken = (userId: string): string => {
@@ -13,10 +16,17 @@ export const generateRefreshToken = (userId: string): string => {
   if (!secretKey) {
     throw new Error("JWT refresh secret key is not defined");
   }
-  return jwt.sign({ userId }, secretKey, { expiresIn: "7d" });
+  const refreshToken = jwt.sign({ userId }, secretKey, { expiresIn: "7d" });
+  return refreshToken;
 };
 
-export const verifyToken = ({ token, secretKey }: { token: string; secretKey: string }) => {
+export const verifyToken = ({
+  token,
+  secretKey,
+}: {
+  token: string;
+  secretKey: string;
+}) => {
   if (!secretKey) {
     throw new Error("JWT secret key is not defined");
   }
@@ -27,12 +37,16 @@ export const verifyToken = ({ token, secretKey }: { token: string; secretKey: st
   }
 };
 
-export const generateAccessAndRefreshTokens = (userId: string) => {
+export const generateAccessAndRefreshTokens = async (userId: string) => {
   const accessToken = generateAccessToken(userId);
   const refreshToken = generateRefreshToken(userId);
-    if (!accessToken || !refreshToken) {
-        throw new Error("Failed to generate tokens");
-    }
-    
+  if (!accessToken || !refreshToken) {
+    throw new Error("Failed to generate tokens");
+  }
+  await db.User.update(
+    { refreshToken: refreshToken },
+    { where: { id: userId } }
+  );
+
   return { accessToken, refreshToken };
-}
+};
