@@ -3,7 +3,7 @@ import { loginUser, registerUser } from "../services/authService";
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await registerUser(req.body);
-    const { accessToken, refreshToken, ...userWithoutToken } = user;
+    const { accessToken, refreshToken, ...safeUser } = user;
     res
       .status(200)
       .cookie("accessToken", user.accessToken, {
@@ -17,7 +17,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       .json({
         message: "User created successfully",
         success: true,
-        user: userWithoutToken,
+        user: safeUser,
       });
   } catch (error) {
     console.error("Registration error:", error);
