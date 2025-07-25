@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { loginUser, registerUser } from "../services/authService";
+import db from "../model";
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await registerUser(req.body);
@@ -26,26 +27,38 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 };
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
-    const user = await loginUser(req.body);
-    res.status(200).json({ user });
-  } catch (error) {
-    console.error("Login error:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
-export const getUserById = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  const userId = req.query.id;
-  console.log(`Fetching user with ID: ${userId}`);
-  try {
-    // Fetch user by ID logic
+    const { accessToken, refreshToken, userWithoutPassword } = await loginUser(
+      req.body
+    );
     res
       .status(200)
-      .json({ message: `User with ID ${userId} fetched successfully` });
+      .cookie("accessToken", accessToken, {
+        httpOnly: true,
+        sameSite: true,
+      })
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        sameSite: true,
+      })
+      .json({ message: "user logged in successfully", userWithoutPassword });
   } catch (error) {
-    console.error("Error fetching user:", error);
-    res.status(500).json({ message: "Internal server error" });
+    console.error("Login error:", error);
+    res.status(500).json({ message: "Internal server error",error });
+  }
+};
+
+export const logout = async (req: Request, res: Response) => {
+  try {
+    await db.User.update(
+      { refreshToken: undefined },
+      { where: { id: req.body.id } }
+    );
+    res
+      .status(200)
+      .clearCookie("accessToken")
+      .clearCookie("refreshToken")
+      .json("logged out successfully");
+  } catch (error) {
+    console.log("error during logout ", error);
   }
 };

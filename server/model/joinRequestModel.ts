@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IJoinRequest } from "../types/JoinRequest.d";
+import ClassRoom from "./classRoomModel";
 
 class JoinRequest extends Model<IJoinRequest> implements IJoinRequest {
   public id!: string;
@@ -10,6 +11,8 @@ class JoinRequest extends Model<IJoinRequest> implements IJoinRequest {
   public message?: string;
   public status!: "pending" | "accepted" | "rejected";
 }
+
+export default JoinRequest;
 export const initJoinRequestModel = (sequelize: Sequelize) => {
   JoinRequest.init(
     {
@@ -51,13 +54,15 @@ export const initJoinRequestModel = (sequelize: Sequelize) => {
       timestamps: true,
     }
   );
+  return JoinRequest;
 };
-export const associateJoinRequestModel = (db: any) => {
-  db.JoinRequest.belongsTo(db.User, {
+
+export const associateJoinRequestModel = (models: any) => {
+  models.JoinRequest.belongsTo(models.User, {
     foreignKey: "userId",
     as: "user",
   });
-  db.JoinRequest.belongsTo(db.ClassRoom, {
+  models.JoinRequest.belongsTo(models.ClassRoom, {
     foreignKey: "classRoomId",
     as: "classRoom",
   });

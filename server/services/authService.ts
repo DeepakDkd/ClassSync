@@ -17,11 +17,8 @@ export const registerUser = async (
     if (existingUser) {
       throw new Error("User already exists");
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await db.User.create({
       ...userData,
-      email,
-      password: hashedPassword,
     });
 
     const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
@@ -36,7 +33,7 @@ export const registerUser = async (
   }
 };
 
-export const loginUser = async (credentials: any): Promise<void> => {
+export const loginUser = async (credentials: any): Promise<any> => {
   try {
     const { email, password } = credentials;
     if (!email || !password) {
@@ -51,12 +48,17 @@ export const loginUser = async (credentials: any): Promise<void> => {
     if (!isPasswordValid) {
       throw new Error("Invalid password");
     }
+    const { password: _, ...userWithoutPassword } = user.toJSON();
+
     const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
       user.id
     );
 
-    console.log("User login attempt:", email);
-    return email;
+    return {
+      user: userWithoutPassword,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    };
   } catch (error) {
     console.error("Login error:", error);
     throw new Error("Login failed");
@@ -68,15 +70,5 @@ export const logoutUser = async (userId: string): Promise<void> => {
   } catch (error) {
     console.error("Logout error:", error);
     throw new Error("Logout failed");
-  }
-};
-
-export const getUserById = async (userId: string): Promise<any> => {
-  try {
-    // Fetch user by ID logic
-    return { id: userId, name: "Sample User" }; // Placeholder response
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    throw new Error("User not found");
   }
 };

@@ -15,6 +15,8 @@ class ClassRoom extends Model<IClassRoom> implements IClassRoom {
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
+export default ClassRoom;
+
 export const initClassRoomModel = (sequelize: Sequelize) => {
   ClassRoom.init(
     {
@@ -28,7 +30,7 @@ export const initClassRoomModel = (sequelize: Sequelize) => {
         allowNull: false,
       },
       createdBy: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
         allowNull: false,
       },
       isActive: {
@@ -37,6 +39,7 @@ export const initClassRoomModel = (sequelize: Sequelize) => {
       },
       description: {
         type: DataTypes.STRING,
+        allowNull: true,
       },
       batch: {
         type: DataTypes.STRING,
@@ -44,10 +47,12 @@ export const initClassRoomModel = (sequelize: Sequelize) => {
       },
       subject: {
         type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true,
       },
 
       roomNumber: {
         type: DataTypes.STRING,
+        allowNull: true,
       },
       buildingName: {
         type: DataTypes.STRING,
@@ -73,10 +78,17 @@ export const initClassRoomModel = (sequelize: Sequelize) => {
 };
 
 export const associateClassRoomModel = (models: any) => {
-  ClassRoom.hasMany(models.User, {
+  models.ClassRoom.hasMany(models.JoinRequest, {
     foreignKey: "classRoomId",
-    as: "students",
+    as: "joinRequests",
+  });
+
+  // ClassRoom.hasMany(models.User, {
+  //   foreignKey: "userId",
+  //   as: "students",
+  // });
+  models.ClassRoom.belongsTo(models.User, {
+    foreignKey: "createdBy",
+    as: "creator",
   });
 };
-export default ClassRoom;
-

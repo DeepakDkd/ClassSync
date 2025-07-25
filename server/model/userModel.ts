@@ -3,6 +3,7 @@ import { IUser } from "../types/user.d";
 import bcrypt from "bcrypt";
 import { sequelize } from "../config/db";
 
+
 class User extends Model<IUser> implements IUser {
   public id!: string;
   public email!: string;
@@ -25,6 +26,7 @@ class User extends Model<IUser> implements IUser {
     return bcrypt.compare(password, this.password);
   }
 }
+export default User;
 
 export const initUserModel = (sequelize: Sequelize) => {
   User.init(
@@ -50,22 +52,27 @@ export const initUserModel = (sequelize: Sequelize) => {
       // },
       firstName: {
         type: DataTypes.STRING,
+        allowNull: false,
       },
       lastName: {
         type: DataTypes.STRING,
+        allowNull: true,
       },
       role: {
         type: DataTypes.STRING,
         defaultValue: "student",
       },
       classRoomId: {
-        type: DataTypes.STRING,
+        type: DataTypes.UUID,
+        allowNull: true,
       },
       refreshToken: {
         type: DataTypes.STRING,
+        allowNull: true,
       },
       lastLoginAt: {
         type: DataTypes.DATE,
+        allowNull: true,
       },
       isActive: {
         type: DataTypes.BOOLEAN,
@@ -73,15 +80,19 @@ export const initUserModel = (sequelize: Sequelize) => {
       },
       profilePictureUrl: {
         type: DataTypes.STRING,
+        allowNull: true,
       },
       bio: {
         type: DataTypes.TEXT,
+        allowNull: true,
       },
       preferences: {
         type: DataTypes.JSON, // use JSON instead of JSONB for MySQL
+        allowNull: true,
       },
       socialLinks: {
         type: DataTypes.JSON, // same here
+        allowNull: true,
       },
     },
     {
@@ -107,13 +118,19 @@ export const initUserModel = (sequelize: Sequelize) => {
 };
 
 export const associateUserModel = (models: any) => {
-  User.belongsTo(models.JoinRequest, {
+  models.User.hasMany(models.JoinRequest, {
     foreignKey: "userId",
     as: "joinRequests",
     onDelete: "SET NULL",
   });
-  User.belongsTo(models.ClassRoom, {
+
+  models.User.hasMany(models.ClassRoom, {
     foreignKey: "createdBy",
-    as:"creator",
+    as: "creator",
+  });
+
+  models.User.belongsTo(models.ClassRoom, {
+    foreignKey: "classRoomId",
+    as: "joinedClass",
   });
 };
