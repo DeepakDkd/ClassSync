@@ -5,8 +5,8 @@ export const getUserById = async (
   res: Response
 ): Promise<void> => {
   try {
+    // const id = req.params['id'];
     const id = req.query.id;
-    console.log(id)
     if (!id) {
       throw new Error("Invalid id");
     }

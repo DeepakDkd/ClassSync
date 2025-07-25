@@ -4,8 +4,8 @@
   "description": "A simple Express server application",
   "main": "src/server.ts",
   "scripts": {
-    "start": "NODE_ENV=production ts-node src/server.ts",
-    "dev": "NODE_ENV=development nodemon ",
+    "start": "ts-node src/server.ts",
+    "dev": " nodemon ",
     "build": "tsc",
     "test": "echo \"No tests specified\" && exit 0"
   },

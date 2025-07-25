@@ -8,3 +8,4 @@ export interface CustomResponse {
     message: string;
     data?: Record<string, any>;
 }
+
