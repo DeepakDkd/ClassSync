@@ -3,7 +3,6 @@ import { verifyToken } from "../utils/jwt";
 import db from "../model";
 import { IUser } from "../types/user";
 
-// Extend Express Request interface to include 'user'
 declare global {
   namespace Express {
     interface Request {
@@ -20,8 +19,10 @@ export const verifyJWT = async (
   try {
     const accessToken =
       req.cookies.accessToken || req.headers.authorization?.split(" ")[1];
-
     const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET!;
+
+    const refreshToken = req.cookies.refreshToken;
+    const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET!;
 
     if (accessToken) {
       const decode = verifyToken({
@@ -35,13 +36,10 @@ export const verifyJWT = async (
       const user = await db.User.findByPk(decode.id, {
         attributes: { exclude: ["password", "refreshToken"] },
       });
-
       req.user = user as IUser;
-      next();
+      return next();
     }
 
-    const refreshToken = req.cookies.refreshToken;
-    const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET!;
     if (refreshToken) {
       const decode = verifyToken({
         token: refreshToken,
@@ -56,7 +54,7 @@ export const verifyJWT = async (
       });
 
       req.user = user as IUser;
-      next();
+      return next();
     }
 
     if (!refreshToken) {

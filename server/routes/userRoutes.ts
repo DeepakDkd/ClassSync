@@ -4,6 +4,6 @@ import {verifyJWT} from "../middleware/auth.middleware"
 
 const router = Router();
 
-router.route("/get-user").get(verifyJWT,getUserById);
+router.route("/get-user/:id").get(verifyJWT,getUserById);
 
 export default router;
