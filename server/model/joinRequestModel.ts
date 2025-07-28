@@ -1,18 +1,20 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { IJoinRequest } from "../types/JoinRequest.d";
-import ClassRoom from "./classRoomModel";
 
 class JoinRequest extends Model<IJoinRequest> implements IJoinRequest {
   public id!: string;
-  public userId!: string;
-  public classRoomId!: string;
-  public email!: string;
-  public classRoomName!: string;
-  public message?: string;
-  public status!: "pending" | "accepted" | "rejected";
+  public batchId!: string;
+  public studentId!: string;
+  public status!: 'pending' | 'approved' | 'rejected';
+  public requestedAt!: Date;
+  public respondedAt?: Date;
+  public reviewedBy?: string;
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 }
 
 export default JoinRequest;
+
 export const initJoinRequestModel = (sequelize: Sequelize) => {
   JoinRequest.init(
     {
@@ -21,30 +23,30 @@ export const initJoinRequestModel = (sequelize: Sequelize) => {
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4,
       },
-      userId: {
+      batchId: {
         type: DataTypes.UUID,
         allowNull: false,
       },
-      classRoomId: {
+      studentId: {
         type: DataTypes.UUID,
         allowNull: false,
-      },
-      email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      classRoomName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      message: {
-        type: DataTypes.STRING,
-        allowNull: true,
       },
       status: {
-        type: DataTypes.ENUM("pending", "accepted", "rejected"),
+        type: DataTypes.ENUM("pending", "approved", "rejected"),
         allowNull: false,
         defaultValue: "pending",
+      },
+      requestedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      respondedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
+      reviewedBy: {
+        type: DataTypes.UUID,
+        allowNull: true,
       },
     },
     {
@@ -58,12 +60,18 @@ export const initJoinRequestModel = (sequelize: Sequelize) => {
 };
 
 export const associateJoinRequestModel = (models: any) => {
-  models.JoinRequest.belongsTo(models.User, {
-    foreignKey: "userId",
-    as: "user",
+  JoinRequest.belongsTo(models.User, {
+    foreignKey: "studentId",
+    as: "student",
   });
-  models.JoinRequest.belongsTo(models.ClassRoom, {
-    foreignKey: "classRoomId",
-    as: "classRoom",
+
+  JoinRequest.belongsTo(models.Batch, {
+    foreignKey: "batchId",
+    as: "batch",
+  });
+
+  JoinRequest.belongsTo(models.User, {
+    foreignKey: "reviewedBy",
+    as: "reviewer",
   });
 };

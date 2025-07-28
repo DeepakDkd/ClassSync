@@ -8,7 +8,7 @@ import { connectDB } from "../config/db";
 import morgan from "morgan"; 
 
 const app: Application = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5432;
 
 // Connect to Database
 connectDB();
@@ -28,6 +28,7 @@ app.get("/", (req: Request, res: Response) => {
 // API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/class", userRoutes);
 
 // Start the Server
 app.listen(PORT, () => {

@@ -6,7 +6,6 @@ export const getUserById = async (
 ): Promise<void> => {
   try {
     const id = req.params.id;
-    console.log(id, "iddd");
     if (!id) {
       res.status(400).json({
         success: false,

@@ -1,9 +1,11 @@
 export interface IJoinRequest {
   id: string;
-  userId: string;
-  classRoomId: string;
-  email: string;
-  classRoomName: string;
-  message?: string;
-  status: "pending" | "accepted" | "rejected";
+  batchId: string;
+  studentId: string;
+  status: 'pending' | 'approved' | 'rejected';
+  requestedAt: Date;
+  respondedAt?: Date;
+  reviewedBy?: string;      
+  createdAt?: Date;
+  updatedAt?: Date;
 }

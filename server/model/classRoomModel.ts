@@ -8,7 +8,6 @@ class ClassRoom extends Model<IClassRoom> implements IClassRoom {
   public isActive?: boolean;
   public description?: string;
   public batch!: string;
-  public subject?: string[];
   public roomNumber?: string;
   public buildingName?: string;
 
@@ -45,11 +44,6 @@ export const initClassRoomModel = (sequelize: Sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      subject: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
-        allowNull: true,
-      },
-
       roomNumber: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -83,10 +77,6 @@ export const associateClassRoomModel = (models: any) => {
     as: "joinRequests",
   });
 
-  // ClassRoom.hasMany(models.User, {
-  //   foreignKey: "userId",
-  //   as: "students",
-  // });
   models.ClassRoom.belongsTo(models.User, {
     foreignKey: "createdBy",
     as: "creator",

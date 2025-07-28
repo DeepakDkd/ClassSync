@@ -19,48 +19,74 @@ export const verifyJWT = async (
   try {
     const accessToken =
       req.cookies.accessToken || req.headers.authorization?.split(" ")[1];
-    const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET!;
 
     const refreshToken = req.cookies.refreshToken;
-    const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET!;
+
+    if (!accessToken && !refreshToken) {
+      return res.status(401).json({
+        success: false,
+        message: "No tokens provided"
+      });
+    }
 
     if (accessToken) {
-      const decode = verifyToken({
-        token: accessToken,
-        secretKey: accessTokenSecret,
-      });
+      try {
+        const decode = verifyToken({
+          token: accessToken,
+          secretKey: process.env.ACCESS_TOKEN_SECRET!
+        });
 
-      if (!decode) {
-        throw new Error("Unaurthorized access ");
+        const user = await db.User.findByPk(decode.userId, {
+          attributes: { exclude: ["password", "refreshToken"] }
+        });
+
+        if (!user) {
+          return res.status(401).json({
+            success: false,
+            message: "User not found"
+          });
+        }
+
+        req.user = user as IUser;
+        return next();
+      } catch (error) {
+        console.log("Access token verification failed, trying refresh token");
       }
-      const user = await db.User.findByPk(decode.id, {
-        attributes: { exclude: ["password", "refreshToken"] },
-      });
-      req.user = user as IUser;
-      return next();
     }
 
     if (refreshToken) {
-      const decode = verifyToken({
-        token: refreshToken,
-        secretKey: refreshTokenSecret,
-      });
+      try {
+        const decode = verifyToken({
+          token: refreshToken,
+          secretKey: process.env.REFRESH_TOKEN_SECRET!
+        });
 
-      if (!decode) {
-        throw new Error("Unaurthorized access ");
+        const user = await db.User.findByPk(decode.userId, {
+          attributes: { exclude: ["password", "refreshToken"] }
+        });
+
+        if (!user) {
+          return res.status(401).json({
+            success: false,
+            message: "User not found"
+          });
+        }
+
+        req.user = user as IUser;
+        return next();
+      } catch (error) {
+        return res.status(401).json({
+          success: false,
+          message: "Invalid refresh token"
+        });
       }
-      const user = await db.User.findByPk(decode.id, {
-        attributes: { exclude: ["password", "refreshToken"] },
-      });
-
-      req.user = user as IUser;
-      return next();
     }
 
-    if (!refreshToken) {
-      throw new Error("Token not found , Unaurthorized access");
-    }
   } catch (error) {
-    console.log("Failed to verify token", error);
+    console.error("Token verification failed:", error);
+    return res.status(401).json({
+      success: false,
+      message: "Authentication failed"
+    });
   }
 };

@@ -62,10 +62,6 @@ export const initUserModel = (sequelize: Sequelize) => {
         type: DataTypes.STRING,
         defaultValue: "student",
       },
-      classRoomId: {
-        type: DataTypes.UUID,
-        allowNull: true,
-      },
       refreshToken: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -86,7 +82,7 @@ export const initUserModel = (sequelize: Sequelize) => {
         type: DataTypes.TEXT,
         allowNull: true,
       },
-      preferences: {
+      preferences: { 
         type: DataTypes.JSON, // use JSON instead of JSONB for MySQL
         allowNull: true,
       },
@@ -129,8 +125,4 @@ export const associateUserModel = (models: any) => {
     as: "creator",
   });
 
-  models.User.belongsTo(models.ClassRoom, {
-    foreignKey: "classRoomId",
-    as: "joinedClass",
-  });
 };
