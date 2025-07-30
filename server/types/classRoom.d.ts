@@ -4,9 +4,10 @@ export interface IClassRoom {
   createdBy: string;
   isActive?: boolean;
   description?: string;
-  batch: string;
   roomNumber?: string;
   buildingName?: string;
+  capacity?: number;
+  isAloted?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

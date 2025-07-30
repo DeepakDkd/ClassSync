@@ -12,7 +12,7 @@ export const registerUser = async (
     const { email, password } = userData;
     if (!email || !password) {
       throw new Error("Email and password are required");
-    }
+    } 
     const existingUser = await db.User.findOne({ where: { email } });
     if (existingUser) {
       throw new Error("User already exists");

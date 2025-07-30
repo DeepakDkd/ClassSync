@@ -5,7 +5,8 @@ export interface IUser {
   // userName?:string;
   firstName?: string;
   lastName?: string;
-  classRoomId?: string;
+  batchId?: string;
+
   refreshToken?: string;
   createdAt?: Date;
   updatedAt?: Date;

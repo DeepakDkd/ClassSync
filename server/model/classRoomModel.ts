@@ -7,7 +7,6 @@ class ClassRoom extends Model<IClassRoom> implements IClassRoom {
   public createdBy!: string;
   public isActive?: boolean;
   public description?: string;
-  public batch!: string;
   public roomNumber?: string;
   public buildingName?: string;
 
@@ -39,10 +38,6 @@ export const initClassRoomModel = (sequelize: Sequelize) => {
       description: {
         type: DataTypes.STRING,
         allowNull: true,
-      },
-      batch: {
-        type: DataTypes.STRING,
-        allowNull: false,
       },
       roomNumber: {
         type: DataTypes.STRING,

@@ -60,18 +60,25 @@ export const initJoinRequestModel = (sequelize: Sequelize) => {
 };
 
 export const associateJoinRequestModel = (models: any) => {
-  JoinRequest.belongsTo(models.User, {
+  if (!models.User || !models.Batch) {
+    throw new Error("Required models not found for JoinRequest associations");
+  }
+
+  models.JoinRequest.belongsTo(models.User, {
     foreignKey: "studentId",
     as: "student",
+    onDelete: "SET NULL",
   });
 
-  JoinRequest.belongsTo(models.Batch, {
+  models.JoinRequest.belongsTo(models.Batch, {
     foreignKey: "batchId",
     as: "batch",
+    onDelete: "CASCADE",
   });
 
-  JoinRequest.belongsTo(models.User, {
+  models.JoinRequest.belongsTo(models.User, {
     foreignKey: "reviewedBy",
     as: "reviewer",
+    onDelete: "SET NULL",
   });
 };

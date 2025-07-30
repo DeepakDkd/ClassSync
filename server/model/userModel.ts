@@ -13,7 +13,7 @@ class User extends Model<IUser> implements IUser {
   public lastName?: string;
   public name?: string;
   public role?: string;
-  public classRoomId?: string;
+  public batchId?: string;
   public refreshToken?: string;
   public lastLoginAt?: Date;
   public isActive?: boolean;
@@ -58,9 +58,13 @@ export const initUserModel = (sequelize: Sequelize) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      batchId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+      },
       role: {
         type: DataTypes.STRING,
-        defaultValue: "student",
+        allowNull: true,
       },
       refreshToken: {
         type: DataTypes.STRING,
@@ -82,7 +86,7 @@ export const initUserModel = (sequelize: Sequelize) => {
         type: DataTypes.TEXT,
         allowNull: true,
       },
-      preferences: { 
+      preferences: {
         type: DataTypes.JSON, // use JSON instead of JSONB for MySQL
         allowNull: true,
       },
@@ -108,21 +112,25 @@ export const initUserModel = (sequelize: Sequelize) => {
           }
         },
       },
-    }
+    } 
   );
   return User;
 };
 
 export const associateUserModel = (models: any) => {
   models.User.hasMany(models.JoinRequest, {
-    foreignKey: "userId",
+    foreignKey: "studentId",
     as: "joinRequests",
     onDelete: "SET NULL",
   });
 
+  models.User.hasMany(models.JoinRequest, {
+    foreignKey: "reviewedBy",
+    as: "reviewedRequests",
+    onDelete: "SET NULL",
+  });
   models.User.hasMany(models.ClassRoom, {
     foreignKey: "createdBy",
     as: "creator",
   });
-
 };

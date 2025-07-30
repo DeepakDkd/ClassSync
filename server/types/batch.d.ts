@@ -2,8 +2,8 @@ export interface IBatch {
     id: string;
     name: string;
     description?: string;
-    startDate: Date;
-    endDate: Date;
+    startDate?: Date;
+    endDate?: Date;
     createdBy: string;
     isActive?: boolean;
     subjectIds?: string[];
