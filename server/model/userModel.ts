@@ -8,6 +8,7 @@ class User extends Model<IUser> implements IUser {
   public id!: string;
   public email!: string;
   public password!: string;
+  public enrollment!: string;
   // public userName?: string;
   public firstName?: string;
   public lastName?: string;
@@ -44,6 +45,11 @@ export const initUserModel = (sequelize: Sequelize) => {
       password: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      enrollment: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
       },
       // userName: {
       //   type: DataTypes.STRING,
@@ -112,7 +118,7 @@ export const initUserModel = (sequelize: Sequelize) => {
           }
         },
       },
-    } 
+    }
   );
   return User;
 };
