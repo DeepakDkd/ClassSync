@@ -1,14 +1,17 @@
-import {DataTypes, Model, Sequelize} from 'sequelize';
-import {sequelize} from '../config/db';
-import {ClassType, IClassSchedule} from '../types/classSchedule.d'
-class ClassSchedule extends Model<IClassSchedule> implements IClassSchedule {
+import {  DataTypes, Model, Sequelize } from "sequelize";
+import { ILecture } from "../types/lecture";
+
+
+class Lecture extends Model<ILecture> implements ILecture {
     public id!: string;
-    public classScheduleName!: string;
+    public lectureName!: string;
     public description?: string;
-    public classType!: ClassType;
-    public batchId!: string;
-    public classRoomId!: string;
-    public lectures?: string[];
+    public courseId!: string;
+    public specializationId?: string;
+    public lectureType!: string;
+    public subject?: string;
+    public teachers?: string[];
+    public lectureImage?: string;
     public startTime!: Date;
     public endTime!: Date;
     public isActive!: boolean;
@@ -18,18 +21,17 @@ class ClassSchedule extends Model<IClassSchedule> implements IClassSchedule {
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 }
+export default Lecture;
 
-export default ClassSchedule;
-
-export const initClassScheduleModel = (sequelize: Sequelize) => {
-    ClassSchedule.init(
+export const initLectureModel = (sequelize: Sequelize) => {
+    Lecture.init(
         {
             id: {
                 type: DataTypes.UUID,
                 primaryKey: true,
                 defaultValue: DataTypes.UUIDV4,
             },
-            classScheduleName: {
+            lectureName: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
@@ -37,20 +39,28 @@ export const initClassScheduleModel = (sequelize: Sequelize) => {
                 type: DataTypes.STRING,
                 allowNull: true,
             },
-            classType: {
+            courseId: {
+                type: DataTypes.UUID,
+                allowNull: false,
+            },
+            specializationId: {
+                type: DataTypes.UUID,
+                allowNull: true,
+            },
+            lectureType: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
-            batchId: {
-                type: DataTypes.UUID,
-                allowNull: false,
+            subject: {
+                type: DataTypes.STRING,
+                allowNull: true,
             },
-            classRoomId: {
-                type: DataTypes.UUID,
-                allowNull: false,
-            },
-            lectures: {
+            teachers: {
                 type: DataTypes.ARRAY(DataTypes.UUID),
+                allowNull: true,
+            },
+            lectureImage: {
+                type: DataTypes.STRING,
                 allowNull: true,
             },
             startTime: {
@@ -63,10 +73,10 @@ export const initClassScheduleModel = (sequelize: Sequelize) => {
             },
             isActive: {
                 type: DataTypes.BOOLEAN,
-                defaultValue: true,
+                allowNull: false,
             },
             date: {
-                type: DataTypes.DATEONLY,
+                type: DataTypes.DATE,
                 allowNull: false,
             },
             createdBy: {
@@ -79,38 +89,37 @@ export const initClassScheduleModel = (sequelize: Sequelize) => {
             },
             createdAt: {
                 type: DataTypes.DATE,
+                allowNull: false,
                 defaultValue: DataTypes.NOW,
             },
             updatedAt: {
                 type: DataTypes.DATE,
-                defaultValue: DataTypes.NOW,
+                allowNull: true,
             },
         },
         {
             sequelize,
-            modelName: 'ClassSchedule',
-            tableName: 'class_schedules',
+            modelName: "Lecture",
+            tableName: "lectures",
             timestamps: true,
         }
     );
-    return ClassSchedule;
+    return Lecture;
 };
 
-export function associateClassScheduleModel(models: any) {
-    models.ClassSchedule.belongsTo(models.Batch, {
-        foreignKey: 'batchId',
-        as: 'batch',
+export const associateLectureModel = (models: any) => {
+    Lecture.belongsTo(models.User, {
+        foreignKey: "createdBy",
+        as: "creator",
     });
-    models.ClassSchedule.belongsTo(models.ClassRoom, {
-        foreignKey: 'classRoomId',
-        as: 'classRoom',
+    Lecture.belongsTo(models.User, {
+        foreignKey: "updatedBy",
+        as: "updater",
     });
-    models.ClassSchedule.belongsTo(models.User, {
-        foreignKey: 'createdBy',
-        as: 'creator',
-    });
-    models.ClassSchedule.belongsTo(models.User, {
-        foreignKey: 'updatedBy',
-        as: 'updater',
-    });
+    // Lecture.belongsToMany(models.ClassSchedule, {
+    //     through: models.LectureClassSchedule,
+    //     foreignKey: "lectureId",
+    //     otherKey: "classScheduleId",
+    //     as: "classSchedules",
+    // });
 }

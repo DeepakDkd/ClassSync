@@ -7,7 +7,6 @@ export interface IClassRoom {
   roomNumber?: string;
   buildingName?: string;
   capacity?: number;
-  isAloted?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

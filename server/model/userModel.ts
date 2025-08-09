@@ -2,6 +2,7 @@ import { Model, DataTypes, Sequelize, DataTypeAbstract } from "sequelize";
 import { IUser } from "../types/user.d";
 import bcrypt from "bcrypt";
 import { sequelize } from "../config/db";
+import JoinRequest from "./joinRequestModel";
 
 
 class User extends Model<IUser> implements IUser {
@@ -124,6 +125,9 @@ export const initUserModel = (sequelize: Sequelize) => {
 };
 
 export const associateUserModel = (models: any) => {
+  if (!models.JoinRequest || !models.ClassRoom || !models.ClassSchedule || !models.Lecture) {
+    throw new Error("Required models not found for User associations");
+  }
   models.User.hasMany(models.JoinRequest, {
     foreignKey: "studentId",
     as: "joinRequests",
@@ -139,4 +143,20 @@ export const associateUserModel = (models: any) => {
     foreignKey: "createdBy",
     as: "creator",
   });
-};
+  models.User.hasMany(models.ClassSchedule, {
+    foreignKey: "createdBy",
+    as: "createdSchedules",
+  });
+  models.User.hasMany(models.ClassSchedule, {
+    foreignKey: "updatedBy",
+    as: "updatedSchedules",
+  });
+  models.User.hasMany(models.Lecture, {
+    foreignKey: "createdBy",
+    as: "lectures",
+  });
+  models.User.hasMany(models.Lecture, {
+    foreignKey: "updatedBy",
+    as: "updatedLectures",
+  });
+}
