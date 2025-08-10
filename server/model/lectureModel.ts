@@ -6,16 +6,18 @@ class Lecture extends Model<ILecture> implements ILecture {
     public id!: string;
     public lectureName!: string;
     public description?: string;
-    public courseId!: string;
-    public specializationId?: string;
+    // public courseId!: string;
+    // public specializationId?: string;
     public lectureType!: string;
     public subject?: string;
     public teachers?: string[];
     public lectureImage?: string;
+    public lectureVideoUrl?: string;
+    public classRoomId!: string;
     public startTime!: Date;
     public endTime!: Date;
     public isActive!: boolean;
-    public date!: Date;
+    // public date!: Date;
     public createdBy!: string;
     public updatedBy!: string;
     public readonly createdAt!: Date;
@@ -39,14 +41,14 @@ export const initLectureModel = (sequelize: Sequelize) => {
                 type: DataTypes.STRING,
                 allowNull: true,
             },
-            courseId: {
-                type: DataTypes.UUID,
-                allowNull: false,
-            },
-            specializationId: {
-                type: DataTypes.UUID,
-                allowNull: true,
-            },
+            // courseId: {
+            //     type: DataTypes.UUID,
+            //     allowNull: false,
+            // },
+            // specializationId: {
+            //     type: DataTypes.UUID,
+            //     allowNull: true,
+            // },
             lectureType: {
                 type: DataTypes.STRING,
                 allowNull: false,
@@ -63,6 +65,14 @@ export const initLectureModel = (sequelize: Sequelize) => {
                 type: DataTypes.STRING,
                 allowNull: true,
             },
+            lectureVideoUrl: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
+            classRoomId: {
+                type: DataTypes.UUID,
+                allowNull: false,
+            },
             startTime: {
                 type: DataTypes.DATE,
                 allowNull: false,
@@ -75,10 +85,10 @@ export const initLectureModel = (sequelize: Sequelize) => {
                 type: DataTypes.BOOLEAN,
                 allowNull: false,
             },
-            date: {
-                type: DataTypes.DATE,
-                allowNull: false,
-            },
+            // date: {
+            //     type: DataTypes.DATE,
+            //     allowNull: false,
+            // },
             createdBy: {
                 type: DataTypes.UUID,
                 allowNull: false,

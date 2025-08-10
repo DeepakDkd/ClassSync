@@ -8,7 +8,7 @@ class ClassSchedule extends Model<IClassSchedule> implements IClassSchedule {
     public classType!: ClassType;
     public batchId!: string;
     public classRoomId!: string;
-    public lectures?: string[];
+    public weeklyScheduleId!: string;
     public startTime!: Date;
     public endTime!: Date;
     public isActive!: boolean;
@@ -49,9 +49,9 @@ export const initClassScheduleModel = (sequelize: Sequelize) => {
                 type: DataTypes.UUID,
                 allowNull: false,
             },
-            lectures: {
-                type: DataTypes.ARRAY(DataTypes.UUID),
-                allowNull: true,
+            weeklyScheduleId: {
+                type: DataTypes.UUID,
+                allowNull: false,
             },
             startTime: {
                 type: DataTypes.DATE,

@@ -23,7 +23,6 @@ const db = {
   JoinRequest: initJoinRequestModel(sequelize),
   ClassSchedule: initClassScheduleModel(sequelize),
   Specialization: initSpecializationModel(sequelize),
-
 };
 
 associateUserModel(db);

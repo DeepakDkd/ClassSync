@@ -6,7 +6,7 @@ export interface IClassSchedule {
     classType: ClassType;
     batchId: string;
     classRoomId: string;
-    lectures?: string[];
+    weeklyScheduleId: string;
     startTime: Date;
     endTime: Date;
     date: Date;
