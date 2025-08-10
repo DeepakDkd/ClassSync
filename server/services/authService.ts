@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { generateAccessAndRefreshTokens } from "../utils/jwt";
 import { IUser } from "../types/user";
 import { sendEmail } from "../utils/email";
+import { ApiError } from "../utils/ApiError";
 
 export const registerUser = async (
   userData: IUser
@@ -81,10 +82,9 @@ export const forgotPasswordService = async (data: any): Promise<any> => {
     if (!email) {
       throw new Error("Email is required");
     }
-    const user = await db.User.findOne({ where: { email } });
-    console.log("User found:", user);
+    const user = await db.User.findOne({ where: { email } }); 
     if (!user) {
-      throw new Error("User not found");
+      throw new ApiError(404, "User not found");
     }
     // Generate a reset token (could be a UUID or JWT)
 
