@@ -3,7 +3,7 @@ import { associateUserModel, initUserModel } from "./userModel";
 import { associateClassRoomModel, initClassRoomModel } from "./classRoomModel";
 import { initBatchModel, associateBatchModel } from './batchModel'
 import {initClassScheduleModel, associateClassScheduleModel} from './classSchedule';
-import { initLectureModel,associateLectureModel } from "./lectureModel";
+import { initLectureModel,associateLectureModel } from "./lecture/lectureModel";
 import {
   associateJoinRequestModel,
   initJoinRequestModel,
@@ -11,6 +11,8 @@ import {
 import { initSubjectModel, associateSubjectModel } from "./subjectModel";
 import { initCourseModel, associateCourseModel } from "./courseModel";
 import {initSpecializationModel, associateSpecializationModel} from './specializationModel';
+import { initWeeklyScheduleModel, associateWeeklyScheduleModel } from './lecture/weeklyScheduleModel';
+import { associateDailyLectureSetModel, initDailyLectureSetModel } from './lecture/dailyLectureSetModel';
 
 const db = {
   sequelize,
@@ -23,6 +25,8 @@ const db = {
   JoinRequest: initJoinRequestModel(sequelize),
   ClassSchedule: initClassScheduleModel(sequelize),
   Specialization: initSpecializationModel(sequelize),
+  WeeklySchedule: initWeeklyScheduleModel(sequelize),
+  DailyLectureSet:initDailyLectureSetModel(sequelize),
 };
 
 associateUserModel(db);
@@ -34,6 +38,8 @@ associateClassRoomModel(db);
 associateJoinRequestModel(db);
 associateClassScheduleModel(db);
 associateSpecializationModel(db);
+associateWeeklyScheduleModel(db);
+associateDailyLectureSetModel(db);
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 

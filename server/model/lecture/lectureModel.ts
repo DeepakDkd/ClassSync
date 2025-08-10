@@ -1,5 +1,5 @@
-import {  DataTypes, Model, Sequelize } from "sequelize";
-import { ILecture } from "../types/lecture";
+import { DataTypes, Model, Sequelize } from "sequelize";
+import { IDailyLectureSet, ILecture, LectureType } from "../../types/lecture";
 
 
 class Lecture extends Model<ILecture> implements ILecture {
@@ -8,8 +8,8 @@ class Lecture extends Model<ILecture> implements ILecture {
     public description?: string;
     // public courseId!: string;
     // public specializationId?: string;
-    public lectureType!: string;
-    public subject?: string;
+    public lectureType!: LectureType;
+    public subject!: string;
     public teachers?: string[];
     public lectureImage?: string;
     public lectureVideoUrl?: string;
@@ -117,6 +117,8 @@ export const initLectureModel = (sequelize: Sequelize) => {
     return Lecture;
 };
 
+
+
 export const associateLectureModel = (models: any) => {
     Lecture.belongsTo(models.User, {
         foreignKey: "createdBy",
@@ -133,3 +135,5 @@ export const associateLectureModel = (models: any) => {
     //     as: "classSchedules",
     // });
 }
+
+
