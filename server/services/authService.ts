@@ -2,6 +2,7 @@ import db from "../model";
 import bcrypt from "bcrypt";
 import { generateAccessAndRefreshTokens } from "../utils/jwt";
 import { IUser } from "../types/user";
+import { sendEmail } from "../utils/email";
 
 export const registerUser = async (
   userData: IUser
@@ -12,7 +13,7 @@ export const registerUser = async (
     const { email, password } = userData;
     if (!email || !password) {
       throw new Error("Email and password are required");
-    } 
+    }
     const existingUser = await db.User.findOne({ where: { email } });
     if (existingUser) {
       throw new Error("User already exists");
@@ -70,5 +71,36 @@ export const logoutUser = async (userId: string): Promise<void> => {
   } catch (error) {
     console.error("Logout error:", error);
     throw new Error("Logout failed");
+  }
+};
+
+export const forgotPasswordService = async (data: any): Promise<any> => {
+  try {
+    const { email } = data;
+    console.log("Forgot password request for email:", email,data);
+    if (!email) {
+      throw new Error("Email is required");
+    }
+    const user = await db.User.findOne({ where: { email } });
+    console.log("User found:", user);
+    if (!user) {
+      throw new Error("User not found");
+    }
+    // Generate a reset token (could be a UUID or JWT)
+
+    
+    const res = await sendEmail(
+      {
+        to: user.email,
+        subject: "Password Reset Request",
+        text: `To reset your password, \n Your OTP is: ${Math.floor(100000 + Math.random() * 900000)}`,
+      }
+    );
+    console.log("Email sent successfully:", res);
+    return user;
+
+  } catch (error) {
+    console.error("Forgot password error:", error);
+    throw new Error("Forgot password failed");
   }
 };

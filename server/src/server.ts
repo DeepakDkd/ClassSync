@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import authRoutes from "../routes/authRoutes";
 import userRoutes from "../routes/userRoutes";
 import { connectDB } from "../config/db";
-import morgan from "morgan"; 
+import morgan from "morgan";
 
 const app: Application = express();
 const PORT = process.env.PORT || 5432;
@@ -29,6 +29,10 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/class", userRoutes);
+
+// error handling middleware
+import { errorHandler } from "../middleware/errorHandler";
+app.use(errorHandler);
 
 // Start the Server
 app.listen(PORT, () => {
