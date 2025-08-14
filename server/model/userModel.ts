@@ -1,8 +1,6 @@
-import { Model, DataTypes, Sequelize, DataTypeAbstract } from "sequelize";
+import { Model, DataTypes, Sequelize } from "sequelize";
 import { IUser } from "../types/user.d";
 import bcrypt from "bcrypt";
-import { sequelize } from "../config/db";
-import JoinRequest from "./joinRequestModel";
 
 
 class User extends Model<IUser> implements IUser {
@@ -23,6 +21,9 @@ class User extends Model<IUser> implements IUser {
   public bio?: string;
   public preferences?: Record<string, any>;
   public socialLinks?: Record<string, string>;
+
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 
   public async isValidPassword(password: string): Promise<boolean> {
     return bcrypt.compare(password, this.password);
@@ -100,6 +101,16 @@ export const initUserModel = (sequelize: Sequelize) => {
       socialLinks: {
         type: DataTypes.JSON, // same here
         allowNull: true,
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
       },
     },
     {

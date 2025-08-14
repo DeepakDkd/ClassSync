@@ -13,6 +13,7 @@ import { initCourseModel, associateCourseModel } from "./courseModel";
 import {initSpecializationModel, associateSpecializationModel} from './specializationModel';
 import { initWeeklyScheduleModel, associateWeeklyScheduleModel } from './lecture/weeklyScheduleModel';
 import { associateDailyLectureSetModel, initDailyLectureSetModel } from './lecture/dailyLectureSetModel';
+import { initPasswordResetRequestModel } from './passwordResetRequestModel';
 
 const db = {
   sequelize,
@@ -27,6 +28,7 @@ const db = {
   Specialization: initSpecializationModel(sequelize),
   WeeklySchedule: initWeeklyScheduleModel(sequelize),
   DailyLectureSet:initDailyLectureSetModel(sequelize),
+  PasswordResetRequest: initPasswordResetRequestModel(sequelize),
 };
 
 associateUserModel(db);

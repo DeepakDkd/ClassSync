@@ -13,11 +13,11 @@ export const registerUser = async (
   try {
     const { email, password } = userData;
     if (!email || !password) {
-      throw new Error("Email and password are required");
+      throw new ApiError(400, "Email and password are required");
     }
     const existingUser = await db.User.findOne({ where: { email } });
     if (existingUser) {
-      throw new Error("User already exists");
+      throw new ApiError(400, "User already exists");
     }
     const newUser = await db.User.create({
       ...userData,
@@ -31,7 +31,7 @@ export const registerUser = async (
     return { ...safeUser, accessToken, refreshToken };
   } catch (error) {
     console.error("Registration error:", error);
-    throw new Error("Registration failed");
+    throw new ApiError(500, "Registration failed");
   }
 };
 
@@ -39,16 +39,16 @@ export const loginUser = async (credentials: any): Promise<any> => {
   try {
     const { email, password } = credentials;
     if (!email || !password) {
-      throw new Error("Email and password are required");
+      throw new ApiError(400, "Email and password are required");
     }
 
     const user = await db.User.findOne({ where: { email } });
     if (!user) {
-      throw new Error("User not found");
+      throw new ApiError(404, "User not found");
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new Error("Invalid password");
+      throw new ApiError(401, "Invalid password");
     }
     const { password: _, ...userWithoutPassword } = user.toJSON();
 
@@ -63,7 +63,7 @@ export const loginUser = async (credentials: any): Promise<any> => {
     };
   } catch (error) {
     console.error("Login error:", error);
-    throw new Error("Login failed");
+    throw new ApiError(500, "Login failed");
   }
 };
 export const logoutUser = async (userId: string): Promise<void> => {
@@ -71,36 +71,6 @@ export const logoutUser = async (userId: string): Promise<void> => {
     // Handle user logout logic
   } catch (error) {
     console.error("Logout error:", error);
-    throw new Error("Logout failed");
-  }
-};
-
-export const forgotPasswordService = async (data: any): Promise<any> => {
-  try {
-    const { email } = data;
-    console.log("Forgot password request for email:", email,data);
-    if (!email) {
-      throw new Error("Email is required");
-    }
-    const user = await db.User.findOne({ where: { email } }); 
-    if (!user) {
-      throw new ApiError(404, "User not found");
-    }
-    // Generate a reset token (could be a UUID or JWT)
-
-    
-    const res = await sendEmail(
-      {
-        to: user.email,
-        subject: "Password Reset Request",
-        text: `To reset your password, \n Your OTP is: ${Math.floor(100000 + Math.random() * 900000)}`,
-      }
-    );
-    console.log("Email sent successfully:", res);
-    return user;
-
-  } catch (error) {
-    console.error("Forgot password error:", error);
-    throw new Error("Forgot password failed");
+    throw new ApiError(500, "Logout failed");
   }
 };

@@ -18,4 +18,7 @@ export interface IUser {
   bio?: string;
   preferences?: Record<string, any>; // User-specific preferences or settings
   socialLinks?: Record<string, string>;
+
+  createdAt: Date;
+  updatedAt: Date;
 }
