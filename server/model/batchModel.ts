@@ -24,10 +24,26 @@ export const initBatchModel = (sequelize: Sequelize) => {
             allowNull: false,
 
         },
+        isActive: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true,
+        },
+        description: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
         createdBy: {
             type: DataTypes.UUID,
             allowNull: false,
         },
+        createdAt: {
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.NOW,
+        },
+        updatedAt: {
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.NOW,
+        }
     },
         {
             sequelize,

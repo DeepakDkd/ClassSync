@@ -1,19 +1,16 @@
 import { sequelize } from "../config/db";
 import { associateUserModel, initUserModel } from "./userModel";
-import { associateClassRoomModel, initClassRoomModel } from "./classRoomModel";
 import { initBatchModel, associateBatchModel } from './batchModel'
-import {initClassScheduleModel, associateClassScheduleModel} from './classSchedule';
-import { initLectureModel,associateLectureModel } from "./lecture/lectureModel";
-import {
-  associateJoinRequestModel,
-  initJoinRequestModel,
-} from "./joinRequestModel";
-import { initSubjectModel, associateSubjectModel } from "./subjectModel";
 import { initCourseModel, associateCourseModel } from "./courseModel";
-import {initSpecializationModel, associateSpecializationModel} from './specializationModel';
+import { initSubjectModel, associateSubjectModel } from "./subjectModel";
+import { initPasswordResetRequestModel } from './passwordResetRequestModel';
+import { associateClassRoomModel, initClassRoomModel } from "./classRoomModel";
+import { initLectureModel, associateLectureModel } from "./lecture/lectureModel";
+import { associateJoinRequestModel, initJoinRequestModel } from "./joinRequestModel";
+import { initClassScheduleModel, associateClassScheduleModel } from './classSchedule';
+import { initSpecializationModel, associateSpecializationModel } from './specializationModel';
 import { initWeeklyScheduleModel, associateWeeklyScheduleModel } from './lecture/weeklyScheduleModel';
 import { associateDailyLectureSetModel, initDailyLectureSetModel } from './lecture/dailyLectureSetModel';
-import { initPasswordResetRequestModel } from './passwordResetRequestModel';
 
 const db = {
   sequelize,
@@ -27,7 +24,7 @@ const db = {
   ClassSchedule: initClassScheduleModel(sequelize),
   Specialization: initSpecializationModel(sequelize),
   WeeklySchedule: initWeeklyScheduleModel(sequelize),
-  DailyLectureSet:initDailyLectureSetModel(sequelize),
+  DailyLectureSet: initDailyLectureSetModel(sequelize),
   PasswordResetRequest: initPasswordResetRequestModel(sequelize),
 };
 
