@@ -2,14 +2,15 @@ import db from "../model";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../utils/email";
 import { Request, Response } from "express";
-import { ApiError } from "../utils/ApiError";
+import { ApiError, handleApiError } from "../utils/ApiError";
 import ApiResponse from "../utils/ApiResponse";
 import { generateOtpEmail } from "../src/templates/emails/otp";
 import { loginUser, registerUser } from "../services/authService";
 import { generateOtp, generateSalt, hashOtp } from "../utils/otp";
 import crypto from "crypto";
+import asyncHandler from "../utils/asyncHandler";
 
-export const register = async (req: Request, res: Response): Promise<void> => {
+export const register = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await registerUser(req.body);
     const { accessToken, refreshToken, ...safeUser } = user;
@@ -28,31 +29,27 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     console.error("Registration error:", error);
     throw new ApiError(500, "Internal server error", [error.message || error]);
   }
-};
+});
 
-export const login = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { accessToken, refreshToken, userWithoutPassword } = await loginUser(
-      req.body
-    );
-    res
-      .status(200)
-      .cookie("accessToken", accessToken, {
-        httpOnly: true,
-        sameSite: true,
-      })
-      .cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        sameSite: true,
-      })
-      .json(new ApiResponse(200, "User logged in successfully", userWithoutPassword));
-  } catch (error: any) {
-    console.error("Login error:", error);
-    throw new ApiError(500, "Internal server error", [error.message || error]);
-  }
-};
+export const login = asyncHandler(async (req: Request, res: Response): Promise<void> => {
 
-export const logout = async (req: Request, res: Response) => {
+  const { accessToken, refreshToken, userWithoutPassword } = await loginUser(
+    req.body
+  );
+  res
+    .status(200)
+    .cookie("accessToken", accessToken, {
+      httpOnly: true,
+      sameSite: true,
+    })
+    .cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      sameSite: true,
+    })
+    .json(new ApiResponse(200, "User logged in successfully", userWithoutPassword));
+})
+
+export const logout = asyncHandler(async (req: Request, res: Response) => {
   try {
     await db.User.update(
       { refreshToken: undefined },
@@ -67,12 +64,10 @@ export const logout = async (req: Request, res: Response) => {
     console.log("error during logout ", error);
     throw new ApiError(500, "Internal server error", [error.message || error]);
   }
-};
+});
 
-export const forgotPassword = async (req: Request, res: Response) => {
+export const forgotPassword = asyncHandler(async (req: Request, res: Response) => {
   try {
- 
-
     const { email } = req.body;
     if (!email) {
       throw new ApiError(400, "Email is required");
@@ -85,9 +80,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
     const otp = generateOtp();
     const salt = generateSalt();
     const otpHash = hashOtp(otp, salt);
-    const otpExpiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes from now
-    console.log("ID:", crypto.randomUUID());
-// return res.status(200).json(new ApiResponse(200, "Password reset OTP sent", { otp }));
+    const otpExpiresAt = new Date(Date.now() + 5 * 60 * 1000);
     const passwordResetRequest = await db.PasswordResetRequest.create({
       id: crypto.randomUUID(),
       userId: user.id,
@@ -115,9 +108,9 @@ export const forgotPassword = async (req: Request, res: Response) => {
     throw new ApiError(500, "Internal server error", [error.message || error]);
 
   }
-};
+});
 
-export const verifyOtp = async (req: Request, res: Response) => {
+export const verifyOtp = asyncHandler(async (req: Request, res: Response) => {
   try {
     const { resetRequestId, otp } = req.body;
     console.log("Reset Request ID:", resetRequestId);
@@ -167,9 +160,9 @@ export const verifyOtp = async (req: Request, res: Response) => {
     console.error("Error during OTP verification:", error);
     throw new ApiError(500, "Internal server error", [error.message || error]);
   }
-};
+});
 
-export const resetPassword = async (req: Request, res: Response) => {
+export const resetPassword = asyncHandler(async (req: Request, res: Response) => {
   try {
     const { resetToken, newPassword } = req.body;
 
@@ -210,4 +203,4 @@ export const resetPassword = async (req: Request, res: Response) => {
     console.error("Error during reset password:", error);
     throw new ApiError(500, "Internal server error", [error.message || error]);
   }
-};
+});

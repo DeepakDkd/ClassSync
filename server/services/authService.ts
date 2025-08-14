@@ -29,9 +29,9 @@ export const registerUser = async (
     const userJson = newUser.toJSON();
     const { password: _, ...safeUser } = userJson;
     return { ...safeUser, accessToken, refreshToken };
-  } catch (error) {
+  } catch (error:any) {
     console.error("Registration error:", error);
-    throw new ApiError(500, "Registration failed");
+    throw new ApiError(500, "Registration failed", [error.message || error]);
   }
 };
 
@@ -61,16 +61,16 @@ export const loginUser = async (credentials: any): Promise<any> => {
       accessToken: accessToken,
       refreshToken: refreshToken,
     };
-  } catch (error) {
+  } catch (error:any) {
     console.error("Login error:", error);
-    throw new ApiError(500, "Login failed");
+    throw new ApiError(500, "Login failed", [error.message || error]);
   }
 };
 export const logoutUser = async (userId: string): Promise<void> => {
   try {
     // Handle user logout logic
-  } catch (error) {
+  } catch (error:any) {
     console.error("Logout error:", error);
-    throw new ApiError(500, "Logout failed");
+    throw new ApiError(500, "Logout failed", [error.message || error]);
   }
 };
