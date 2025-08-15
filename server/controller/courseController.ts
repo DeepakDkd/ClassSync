@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
 import asyncHandler from "../utils/asyncHandler";
-import { createCourseService } from "../services/courseService"
+import { createCourseService, getAllCourse } from "../services/courseService"
 
 export const createCourse = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    console.log(req.body)
     const course = await createCourseService(req.body)
     res.status(201).json({
         message: "Course created successfully",
@@ -11,3 +10,11 @@ export const createCourse = asyncHandler(async (req: Request, res: Response): Pr
     });
 });
 
+export const getCourses = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+
+    const course = await getAllCourse();
+    res.status(200).json({
+        message: "All courses found successfully",
+        data: course
+    })
+})
