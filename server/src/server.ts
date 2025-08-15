@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 
 import authRoutes from "../routes/authRoutes";
 import userRoutes from "../routes/userRoutes";
+import batchRoutes from "../routes/batchRoutes";
+import courseRoutes from "../routes/courseRoutes";
 import { connectDB } from "../config/db";
 import morgan from "morgan";
 
@@ -28,7 +30,9 @@ app.get("/", (req: Request, res: Response) => {
 // API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/class", userRoutes);
+app.use("/api/batch", batchRoutes);
+app.use("/api/course", courseRoutes);
+
 
 // error handling middleware
 import { errorHandler } from "../middleware/errorHandler";

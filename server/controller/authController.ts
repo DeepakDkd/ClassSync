@@ -30,7 +30,7 @@ export const register = asyncHandler(async (req: Request, res: Response): Promis
 
 export const login = asyncHandler(async (req: Request, res: Response): Promise<void> => {
 
-  const { accessToken, refreshToken, userWithoutPassword } = await loginUser(
+  const { accessToken, refreshToken, user } = await loginUser(
     req.body
   );
   res
@@ -43,7 +43,14 @@ export const login = asyncHandler(async (req: Request, res: Response): Promise<v
       httpOnly: true,
       sameSite: true,
     })
-    .json(new ApiResponse(200, "User logged in successfully", userWithoutPassword));
+  const plainUser = user.toJSON
+    ? user.toJSON()
+    : user;
+
+  const { password, refreshToken: _rt, ...safeUser } = plainUser;
+
+  res
+    .json(new ApiResponse(200, "User logged in successfully", { user: safeUser }));
 })
 
 export const logout = asyncHandler(async (req: Request, res: Response) => {

@@ -55,5 +55,6 @@ export const associateSpecializationModel = (models: any) => {
         foreignKey: 'courseId',
         as: 'course',
     });
+    
 };
 export default Specialization;

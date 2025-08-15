@@ -4,7 +4,8 @@ import { ICourse } from '../types/course.d';
 class Course extends Model<ICourse> implements ICourse {
     public id!: string;
     public name!: string;
-    public description!: string;
+    public description?: string;
+    public durationInYears?: number;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 }
@@ -23,6 +24,10 @@ export const initCourseModel = (sequelize: Sequelize) => {
             },
             description: {
                 type: DataTypes.STRING,
+                allowNull: true,
+            },
+            durationInYears: {
+                type: DataTypes.INTEGER,
                 allowNull: true,
             },
             createdAt: {
@@ -50,5 +55,6 @@ export const associateCourseModel = (models: any) => {
         foreignKey: 'courseId',
         as: 'specializations',
     });
+
 };
 export default Course;

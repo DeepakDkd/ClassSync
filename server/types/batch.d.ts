@@ -7,6 +7,9 @@ export interface IBatch {
     createdBy: string;
     isActive?: boolean;
     subjectIds?: string[];
+    batchCode?: string; 
+    batchYear?: string;
+    batchSemester?: string;
     preferences?: Record<string, any>;
     additionalInfo?: Record<string, any>;
     createdAt?: Date;
