@@ -1,8 +1,9 @@
 import { ISpecialization } from "../types/specialization"
 import { ApiError } from "../utils/ApiError"
 import db from '../model/index'
+import Course from "../model/courseModel"
 
-export const createSpecializationService = async ({data,id}:{data: ISpecialization,id:string}):Promise<ISpecialization> => {
+export const createSpecializationService = async ({ data, id }: { data: ISpecialization, id: string }): Promise<ISpecialization> => {
     try {
         const { name } = data
         if (!name) {
@@ -28,4 +29,23 @@ export const createSpecializationService = async ({data,id}:{data: ISpecializati
         throw new ApiError(500, "Failed to create specialization", [error.message | error])
 
     }
+}
+
+export const getSpecializationService = async (id: string):Promise<ISpecialization> => {
+    if (!id)
+        throw new ApiError(400, "Id is required")
+
+    const specialization = await db.Specialization.findOne({
+        where: { id: id },
+        include: [
+            {
+                model: Course,
+                as: 'course',
+            }
+        ]
+    })
+    if(!specialization)
+        throw new ApiError(404,"Specialization not found")
+    console.log(JSON.stringify(specialization))
+    return specialization;
 }

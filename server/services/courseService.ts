@@ -24,7 +24,7 @@ export const createCourseService = async (course: ICourse): Promise<ICourse> => 
 
 }
 
-export const getAllCourse = async (): Promise<ICourse[]> => {
+export const getAllCourseService = async (): Promise<ICourse[]> => {
     try {
 
         const course = await db.Course.findAll();
@@ -36,5 +36,20 @@ export const getAllCourse = async (): Promise<ICourse[]> => {
         console.log("Error in Course Creation", error)
         throw new ApiError(500, "Course Creation Failed", [error.message || error])
 
+    }
+}
+
+export const getCourseByIdService = async (id: string): Promise<ICourse> => {
+    try {
+        if (!id) throw new ApiError(400, "Course id is required")
+        const course = await db.Course.findByPk(id);
+        if (!course) {
+            throw new ApiError(404, "Course not found")
+        }
+        return course;
+
+    } catch (error: any) {
+        console.log("Failed to get course", error)
+        throw new ApiError(500, "Failed to get course", [error.message || error])
     }
 }

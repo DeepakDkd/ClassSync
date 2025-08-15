@@ -2,7 +2,6 @@ import db from "../model";
 import bcrypt from "bcrypt";
 import { generateAccessAndRefreshTokens } from "../utils/jwt";
 import { IUser, IUserInstance } from "../types/user";
-import { sendEmail } from "../utils/email";
 import { ApiError } from "../utils/ApiError";
 
 export const registerUser = async (

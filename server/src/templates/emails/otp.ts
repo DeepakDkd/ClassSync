@@ -40,7 +40,7 @@ export function generateOtpEmail(
                   </div>
                   
                   <p style="font-size: 14px; color: #888888; margin-top: 25px;">
-                    If you didn’t request a password reset, please ignore this email.  
+                    If you didn&apos;t request a password reset, please ignore this email.  
                     Your account is safe.
                   </p>
                 </td>
@@ -70,7 +70,7 @@ This code will expire in ${expirationMinutes} minutes.
 
 OTP: ${otp}
 
-If you didn’t request a password reset, you can ignore this email. Your account is safe.
+If you didn&apos;t request a password reset, you can ignore this email. Your account is safe.
 
 © ${new Date().getFullYear()} ${appName}
   `;
