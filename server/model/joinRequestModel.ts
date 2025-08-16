@@ -39,6 +39,7 @@ export const initJoinRequestModel = (sequelize: Sequelize) => {
       requestedAt: {
         type: DataTypes.DATE,
         allowNull: false,
+        defaultValue:DataTypes.NOW
       },
       respondedAt: {
         type: DataTypes.DATE,
@@ -82,3 +83,4 @@ export const associateJoinRequestModel = (models: any) => {
     onDelete: "SET NULL",
   });
 };
+

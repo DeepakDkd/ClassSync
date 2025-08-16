@@ -8,9 +8,9 @@ class Batch extends Model<IBatch> implements IBatch {
     public createdBy!: string;
     public isActive!: boolean;
     public description?: string;
-    batchCode?: string | undefined;
-    batchYear?: string | undefined;
-    batchSemester?: string | undefined;
+    public batchCode?: string | undefined;
+    public batchYear?: string | undefined;
+    public batchSemester?: string | undefined;
     public readonly createdAt?: Date | undefined;
     public readonly updatedAt?: Date | undefined;
 
@@ -37,7 +37,16 @@ export const initBatchModel = (sequelize: Sequelize) => {
             type: DataTypes.STRING,
             allowNull: true,
         },
-        
+        batchYear: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+        batchCode: {
+            type: DataTypes.STRING,
+            allowNull: true
+
+        },
+
         createdBy: {
             type: DataTypes.UUID,
             allowNull: false,

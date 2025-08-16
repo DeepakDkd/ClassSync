@@ -67,10 +67,6 @@ export const initClassRoomModel = (sequelize: Sequelize) => {
 };
 
 export const associateClassRoomModel = (models: any) => {
-  models.ClassRoom.hasMany(models.JoinRequest, {
-    foreignKey: "classRoomId",
-    as: "joinRequests",
-  });
 
   models.ClassRoom.belongsTo(models.User, {
     foreignKey: "createdBy",

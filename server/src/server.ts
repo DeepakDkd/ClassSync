@@ -34,6 +34,7 @@ app.use("/api/batch", batchRoutes);
 app.use("/api/course", courseRoutes);
 
 
+
 // error handling middleware
 import { errorHandler } from "../middleware/errorHandler";
 app.use(errorHandler);
