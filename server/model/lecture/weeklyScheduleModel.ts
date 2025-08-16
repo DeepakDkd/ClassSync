@@ -4,8 +4,8 @@ import { IWeeklySchedule } from "../../types/lecture.d";
 class WeeklySchedule extends Model<IWeeklySchedule> implements IWeeklySchedule {
     public id!: string;
     public name?: string;
-    public mapping!: { [dayOfWeek: number]: string }; 
-    public startDate!: string; 
+    public mapping!: { [dayOfWeek: number]: string };
+    public startDate!: string;
     public endDate!: string; // YYYY-MM-DD format
     public courseId!: string;
     public specializationId?: string;
@@ -66,13 +66,14 @@ export const initWeeklyScheduleModel = (sequelize: Sequelize) => {
                 type: DataTypes.DATE,
                 allowNull: true,
             },
-            
+
         },
         {
             sequelize,
             modelName: 'WeeklySchedule',
             tableName: 'weekly_schedules',
             timestamps: true,
+            underscored: true,
         }
     );
     return WeeklySchedule;

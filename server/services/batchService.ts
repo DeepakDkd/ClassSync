@@ -1,3 +1,4 @@
+import { DataTypes, where } from "sequelize";
 import db from "../model";
 import { IBatch } from "../types/batch";
 import { IJoinRequest } from "../types/JoinRequest";
@@ -64,3 +65,74 @@ export const joinRequestService = async ({ batchId, studentId }: { batchId: stri
     }
 }
 
+export const approveRequestService = async (data: any): Promise<any> => {
+
+    try {
+        console.log("Dataaa",data)
+
+        const { id, batchId, studentId, status, reviewedBy } = data;
+        if (!id) {
+            throw new ApiError(400, "Request Id if required")
+        }
+        console.log("IDDD",id)
+        // const request = await db.JoinRequest.findByPk(id)
+
+        // if (!request) {
+        //     throw new ApiError(404, "Request not found")
+        // }
+
+        // request.status = status
+        // request.reviewedBy = reviewedBy
+        // request.respondedAt = new Date()
+
+        // const updatedData = await request.save()
+
+        // console.log('updatedData', updatedData)
+
+        // return updatedData;
+        const record = await db.JoinRequest.update({
+            status: status,
+            reviewedBy: reviewedBy
+        }, { where: { id: 1 ,status:"pending"} });
+
+        if (!record) {
+            throw new ApiError(404, "Request not found")
+        }
+
+        // if (record) {
+        //     await record.update({
+        //         status: "pending",
+        //         reviewedBy: reviewedBy,
+        //     });
+        // }
+        // console.log("RECORD___", request)
+        // console.log("RECORD updatedData___", updatedData)
+
+        return record;
+
+
+    } catch (error: any) {
+        console.log("Join request failed to batch", error)
+        throw new ApiError(500, "Join request failed to batch ", [error.message || error])
+
+    }
+}
+
+export const getAllRequestService = async (): Promise<IJoinRequest[]> => {
+
+    try {
+        const requests = await db.JoinRequest.findAll({ where: { status: "pending" } })
+
+        if (!requests) {
+            throw new ApiError(404, "Requests not found")
+        }
+
+        return requests;
+
+
+    } catch (error: any) {
+        console.log("Failed to get all Join request", error)
+        throw new ApiError(500, "Failed to get all Join request ", [error.message || error])
+
+    }
+}

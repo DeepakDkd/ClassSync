@@ -85,6 +85,7 @@ export const initDailyLectureSetModel = (sequelize: Sequelize) => {
             modelName: "DailyLectureSet",
             tableName: "daily_lecture_sets",
             timestamps: true,
+            underscored: true,
         }
     );
     return DailyLectureSet;

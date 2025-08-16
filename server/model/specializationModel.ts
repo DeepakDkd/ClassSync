@@ -1,4 +1,4 @@
-import { DataTypes,Model ,Sequelize } from "sequelize";
+import { DataTypes, Model, Sequelize } from "sequelize";
 import { ISpecialization } from "../types/specialization.d";
 
 class Specialization extends Model<ISpecialization> implements ISpecialization {
@@ -45,6 +45,7 @@ export const initSpecializationModel = (sequelize: Sequelize) => {
             modelName: 'Specialization',
             tableName: 'specializations',
             timestamps: true,
+            underscored: true,
         }
     );
     return Specialization;
@@ -55,6 +56,6 @@ export const associateSpecializationModel = (models: any) => {
         foreignKey: 'courseId',
         as: 'course',
     });
-    
+
 };
 export default Specialization;

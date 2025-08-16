@@ -61,6 +61,7 @@ export const initClassRoomModel = (sequelize: Sequelize) => {
       modelName: "ClassRoom",
       tableName: "classrooms",
       timestamps: true,
+      underscored: true,
     }
   );
   return ClassRoom;

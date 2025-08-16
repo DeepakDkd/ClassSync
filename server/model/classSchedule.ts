@@ -1,6 +1,6 @@
-import {DataTypes, Model, Sequelize} from 'sequelize';
-import {sequelize} from '../config/db';
-import {ClassType, IClassSchedule} from '../types/classSchedule.d'
+import { DataTypes, Model, Sequelize } from 'sequelize';
+import { sequelize } from '../config/db';
+import { ClassType, IClassSchedule } from '../types/classSchedule.d'
 class ClassSchedule extends Model<IClassSchedule> implements IClassSchedule {
     public id!: string;
     public classScheduleName!: string;
@@ -91,6 +91,7 @@ export const initClassScheduleModel = (sequelize: Sequelize) => {
             modelName: 'ClassSchedule',
             tableName: 'class_schedules',
             timestamps: true,
+            underscored: true,
         }
     );
     return ClassSchedule;

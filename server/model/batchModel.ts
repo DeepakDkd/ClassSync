@@ -64,16 +64,17 @@ export const initBatchModel = (sequelize: Sequelize) => {
             sequelize,
             modelName: "Batch",
             tableName: "batches",
-            timestamps: true
+            timestamps: true,
+            underscored: true,
         });
     return Batch;
 };
 
 export const associateBatchModel = (models: any) => {
-    models.Batch.hasMany(models.JoinRequest, {
-        foreignKey: "batchId",
-        as: "joinRequests",
-    })
+    // models.Batch.hasMany(models.JoinRequest, {
+    //     foreignKey: "batchId",
+    //     as: "joinRequests",
+    // })
     models.Batch.belongsTo(models.User, {
         foreignKey: "createdBy",
         as: "batchCreator"

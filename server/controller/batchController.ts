@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { ApiError } from "../utils/ApiError";
 import asyncHandler from "../utils/asyncHandler";
-import { createBatchService, getAllBatchesService, getBatchByIdService, joinRequestService } from "../services/batchService"
+import { approveRequestService, createBatchService, getAllBatchesService, getAllRequestService, getBatchByIdService, joinRequestService } from "../services/batchService"
 import ApiResponse from "../utils/ApiResponse";
 
 export const createBatch = asyncHandler(async (req: Request, res: Response): Promise<void> => {
@@ -46,3 +46,22 @@ export const joinRequest = asyncHandler(async (req: Request, res: Response): Pro
     const request = await joinRequestService({ batchId, studentId });
     res.status(200).json(new ApiResponse(200, "Join request send successfully", request))
 })
+
+
+export const approveRequest = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const id = req.params.id
+    const reviewedBy = req?.user?.id
+    if (!reviewedBy)
+        throw new ApiError(400, "User Id not found");
+    const { batchId, studentId, status } = req.body;
+    const requestData = { id, batchId, studentId, status, reviewedBy }
+    const response = await approveRequestService(requestData);
+    res.status(200).json(new ApiResponse(200, "Join request updated successfully", response));
+})
+
+export const getAllJoinRequest = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+
+    const allRequests = await getAllRequestService();
+    res.status(200).json(new ApiResponse(200, "Fetched all Join request successfully", allRequests));
+})
+

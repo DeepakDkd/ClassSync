@@ -112,6 +112,7 @@ export const initLectureModel = (sequelize: Sequelize) => {
             modelName: "Lecture",
             tableName: "lectures",
             timestamps: true,
+            underscored: true,
         }
     );
     return Lecture;

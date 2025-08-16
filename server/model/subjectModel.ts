@@ -1,5 +1,5 @@
-import { DataTypes,Model ,Sequelize } from "sequelize";
-import {ISubject} from "../types/subject.d";
+import { DataTypes, Model, Sequelize } from "sequelize";
+import { ISubject } from "../types/subject.d";
 
 class Subject extends Model<ISubject> implements ISubject {
     public id!: string;
@@ -50,6 +50,7 @@ export const initSubjectModel = (sequelize: Sequelize) => {
             modelName: 'Subject',
             tableName: 'subjects',
             timestamps: true,
+            underscored: true,
         }
     );
     return Subject;

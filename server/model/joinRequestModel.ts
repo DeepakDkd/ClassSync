@@ -39,7 +39,7 @@ export const initJoinRequestModel = (sequelize: Sequelize) => {
       requestedAt: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue:DataTypes.NOW
+        defaultValue: DataTypes.NOW
       },
       respondedAt: {
         type: DataTypes.DATE,
@@ -53,8 +53,9 @@ export const initJoinRequestModel = (sequelize: Sequelize) => {
     {
       sequelize,
       modelName: "JoinRequest",
-      tableName: "joinRequests",
+      tableName: "join_requests",
       timestamps: true,
+      underscored: true,
     }
   );
   return JoinRequest;

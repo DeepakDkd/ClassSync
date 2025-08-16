@@ -175,6 +175,9 @@
 import { Model, DataTypes, Sequelize } from "sequelize";
 import { IUser } from "../types/user.d";
 import bcrypt from "bcrypt";
+import JoinRequest from "./joinRequestModel";
+import ClassRoom from "./classRoomModel";
+import ClassSchedule from "./classSchedule";
 
 class User extends Model<IUser> implements IUser {
   public id!: string;
@@ -292,6 +295,7 @@ export const initUserModel = (sequelize: Sequelize) => {
       modelName: "User",
       tableName: "users",
       timestamps: true,
+      underscored: true,
       hooks: {
         beforeCreate: async (user: User) => {
           if (user.password) {
@@ -310,6 +314,7 @@ export const initUserModel = (sequelize: Sequelize) => {
 };
 
 export const associateUserModel = (models: any) => {
+  console.log(models.JoinRequest, models.ClassRoom, models.ClassSchedule)
   if (!models.JoinRequest || !models.ClassRoom || !models.ClassSchedule || !models.Lecture) {
     throw new Error("Required models not found for User associations");
   }

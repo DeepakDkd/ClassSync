@@ -30,8 +30,6 @@ export const verifyToken = ({
   if (!secretKey) {
     throw new Error("JWT secret key is not defined");
   }
-  console.log("Verifying token:", token);
-  console.log("Using secret key:", secretKey);
   try {
     return jwt.verify(token, secretKey) as { userId: string };
   } catch (error) {
