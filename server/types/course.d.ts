@@ -6,6 +6,7 @@ export interface ICourse {
     language?: string;
     thumbnail?: string;
     bannerImage?: string;
+    courseCode:string;
     createdAt: Date;
     updatedAt: Date;
 }

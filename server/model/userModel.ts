@@ -175,9 +175,6 @@
 import { Model, DataTypes, Sequelize } from "sequelize";
 import { IUser } from "../types/user.d";
 import bcrypt from "bcrypt";
-import JoinRequest from "./joinRequestModel";
-import ClassRoom from "./classRoomModel";
-import ClassSchedule from "./classSchedule";
 
 class User extends Model<IUser> implements IUser {
   public id!: string;
@@ -187,6 +184,8 @@ class User extends Model<IUser> implements IUser {
   public firstName?: string;
   public lastName?: string;
   public role?: string;
+  public courseId?: string | undefined;
+  public specializationId?: string | undefined;
   public batchId?: string;
   public refreshToken?: string;
   public lastLoginAt?: Date;
@@ -224,7 +223,7 @@ export const initUserModel = (sequelize: Sequelize) => {
       },
       enrollment: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         unique: true,
       },
       firstName: {
@@ -233,6 +232,15 @@ export const initUserModel = (sequelize: Sequelize) => {
       },
       lastName: {
         type: DataTypes.STRING,
+        allowNull: true,
+      },
+
+      courseId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+      },
+      specializationId: {
+        type: DataTypes.UUID,
         allowNull: true,
       },
       batchId: {
@@ -314,7 +322,6 @@ export const initUserModel = (sequelize: Sequelize) => {
 };
 
 export const associateUserModel = (models: any) => {
-  console.log(models.JoinRequest, models.ClassRoom, models.ClassSchedule)
   if (!models.JoinRequest || !models.ClassRoom || !models.ClassSchedule || !models.Lecture) {
     throw new Error("Required models not found for User associations");
   }

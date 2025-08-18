@@ -49,3 +49,17 @@ export const getSpecializationService = async (id: string): Promise<ISpecializat
     console.log(JSON.stringify(specialization))
     return specialization;
 }
+export const deleteSpecializationService = async (id: string): Promise<ISpecialization> => {
+    try {
+
+        const specialization = await db.Specialization.findByPk(id);
+        if (!specialization) {
+            throw new ApiError(404, "Specialization not found")
+        }
+        await specialization.destroy();
+        return specialization;
+    } catch (error: any) {
+        console.log("Error in deleting Specialization", error)
+        throw new ApiError(500, "Failed to deleting Specialization ", [error.message || error])
+    }
+}

@@ -6,6 +6,7 @@ import authRoutes from "../routes/authRoutes";
 import userRoutes from "../routes/userRoutes";
 import batchRoutes from "../routes/batchRoutes";
 import courseRoutes from "../routes/courseRoutes";
+import joinRequests from "../routes/joinRequestRoutes";
 import { connectDB } from "../config/db";
 import morgan from "morgan";
 
@@ -32,6 +33,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/batch", batchRoutes);
 app.use("/api/course", courseRoutes);
+app.use("/api/join-request", joinRequests);
 
 
 

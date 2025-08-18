@@ -1,19 +1,21 @@
 export interface IBatch {
-    id: string;
-    name: string;
-    description?: string;
-    startDate?: Date;
-    endDate?: Date;
-    createdBy: string;
-    isActive?: boolean;
-    subjectIds?: string[];
-    batchCode?: string; 
-    batchYear?: string;
-    batchSemester?: string;
-    preferences?: Record<string, any>;
-    additionalInfo?: Record<string, any>;
-    createdAt?: Date;
-    updatedAt?: Date;
+  id: string;
+  name: string;
+  description?: string;
+  startDate?: Date;
+  endDate?: Date;
+  createdBy: string;
+  isActive?: boolean;
+  courseId?: string;
+  subjectIds?: string[];
+  batchCode?: string;
+  batchYear?: string;
+  batchSemester?: string;
+
+  preferences?: Record<string, any>;
+  additionalInfo?: Record<string, any>;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface IBatchStudent {
@@ -21,7 +23,7 @@ export interface IBatchStudent {
   batchId: string;
   studentId: string;
   joinedAt: Date;
-  isActive: boolean;          
+  isActive: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }

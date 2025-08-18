@@ -61,7 +61,8 @@ export interface IUser {
   department?: string;
   admissionDate?: Date | string;
   graduationDate?: Date | string;
-  courseIds?: string[]; // enrolled courses
+  courseId?: string; 
+  specializationId?:string;
   mentorId?: string; // teacher or mentor ID
   grades?: Record<string, string | number>; // { courseId: grade }
   attendancePercentage?: number;

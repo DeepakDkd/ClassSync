@@ -5,6 +5,7 @@ class Specialization extends Model<ISpecialization> implements ISpecialization {
     public id!: string;
     public name!: string;
     public description?: string;
+    public specializationCode!: string;
     public courseId!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -21,10 +22,16 @@ export const initSpecializationModel = (sequelize: Sequelize) => {
             name: {
                 type: DataTypes.STRING,
                 allowNull: false,
+                unique: true
             },
             description: {
                 type: DataTypes.STRING,
                 allowNull: true,
+            },
+            specializationCode: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                unique: true
             },
             courseId: {
                 type: DataTypes.UUID,

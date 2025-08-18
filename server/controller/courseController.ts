@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import asyncHandler from "../utils/asyncHandler";
-import { createCourseService, getAllCourseService, getCourseByIdService } from "../services/courseService"
+import { createCourseService, deleteCourseService, getAllCourseService, getCourseByIdService } from "../services/courseService"
 import ApiResponse from "../utils/ApiResponse";
+import { ApiError } from "../utils/ApiError";
 
 export const createCourse = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const course = await createCourseService(req.body)
@@ -24,3 +25,13 @@ export const getCourseById = asyncHandler(async (req: Request, res: Response): P
         course
     ))
 });
+export const deleteCourse = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const id = req.params.id;
+    if (!id)
+        throw new ApiError(400, "Course Id not found")
+
+    const batches = await deleteCourseService(id);
+
+    res.status(200).json(new ApiResponse(200, "Course deleted successfully", batches))
+
+})

@@ -3,6 +3,7 @@ export interface ISpecialization {
     name: string;
     description?: string;
     courseId: string;
+    specializationCode:string;
     createdAt: Date;
     updatedAt: Date;
 }

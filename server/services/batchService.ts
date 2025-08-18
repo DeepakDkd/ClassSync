@@ -40,99 +40,27 @@ export const getAllBatchesService = async (): Promise<IBatch[]> => {
 export const getBatchByIdService = async (id: string): Promise<IBatch> => {
     try {
 
-        const batches = await db.Batch.findByPk(id);
-        if (!batches) {
+        const batch = await db.Batch.findByPk(id);
+        if (!batch) {
             throw new ApiError(404, "Batch not found")
         }
-        return batches;
+        return batch;
     } catch (error: any) {
         console.log("Error in fetching Batch", error)
         throw new ApiError(500, "Failed to fetch Batch ", [error.message || error])
     }
 }
-
-export const joinRequestService = async ({ batchId, studentId }: { batchId: string, studentId: string }): Promise<IJoinRequest> => {
+export const deleteBatchByIdService = async (id: string): Promise<IBatch> => {
     try {
-        const data: any = { batchId: batchId, studentId: studentId }
-        const request = await db.JoinRequest.create({ ...data })
-        if (!request) {
-            throw new ApiError(404, "Faild to create join request.")
+
+        const batch = await db.Batch.findByPk(id);
+        if (!batch) {
+            throw new ApiError(404, "Batch not found")
         }
-        return request;
+        await batch.destroy();
+        return batch;
     } catch (error: any) {
-        console.log("Join request failed to batch", error)
-        throw new ApiError(500, "Join request failed to batch ", [error.message || error])
-    }
-}
-
-export const approveRequestService = async (data: any): Promise<any> => {
-
-    try {
-        console.log("Dataaa",data)
-
-        const { id, batchId, studentId, status, reviewedBy } = data;
-        if (!id) {
-            throw new ApiError(400, "Request Id if required")
-        }
-        console.log("IDDD",id)
-        // const request = await db.JoinRequest.findByPk(id)
-
-        // if (!request) {
-        //     throw new ApiError(404, "Request not found")
-        // }
-
-        // request.status = status
-        // request.reviewedBy = reviewedBy
-        // request.respondedAt = new Date()
-
-        // const updatedData = await request.save()
-
-        // console.log('updatedData', updatedData)
-
-        // return updatedData;
-        const record = await db.JoinRequest.update({
-            status: status,
-            reviewedBy: reviewedBy
-        }, { where: { id: 1 ,status:"pending"} });
-
-        if (!record) {
-            throw new ApiError(404, "Request not found")
-        }
-
-        // if (record) {
-        //     await record.update({
-        //         status: "pending",
-        //         reviewedBy: reviewedBy,
-        //     });
-        // }
-        // console.log("RECORD___", request)
-        // console.log("RECORD updatedData___", updatedData)
-
-        return record;
-
-
-    } catch (error: any) {
-        console.log("Join request failed to batch", error)
-        throw new ApiError(500, "Join request failed to batch ", [error.message || error])
-
-    }
-}
-
-export const getAllRequestService = async (): Promise<IJoinRequest[]> => {
-
-    try {
-        const requests = await db.JoinRequest.findAll({ where: { status: "pending" } })
-
-        if (!requests) {
-            throw new ApiError(404, "Requests not found")
-        }
-
-        return requests;
-
-
-    } catch (error: any) {
-        console.log("Failed to get all Join request", error)
-        throw new ApiError(500, "Failed to get all Join request ", [error.message || error])
-
+        console.log("Error in deleting Batch", error)
+        throw new ApiError(500, "Failed to deleting Batch ", [error.message || error])
     }
 }

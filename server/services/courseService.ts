@@ -53,3 +53,17 @@ export const getCourseByIdService = async (id: string): Promise<ICourse> => {
         throw new ApiError(500, "Failed to get course", [error.message || error])
     }
 }
+export const deleteCourseService = async (id: string): Promise<ICourse> => {
+    try {
+
+        const course = await db.Course.findByPk(id);
+        if (!course) {
+            throw new ApiError(404, "Course not found")
+        }
+        await course.destroy();
+        return course;
+    } catch (error: any) {
+        console.log("Error in deleting Course", error)
+        throw new ApiError(500, "Failed to deleting Course ", [error.message || error])
+    }
+}

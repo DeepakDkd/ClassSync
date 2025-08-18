@@ -1,6 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { IBatch } from '../types/batch.d'
-import { sequelize } from "../config/db";
 
 class Batch extends Model<IBatch> implements IBatch {
     public id!: string;
@@ -8,6 +7,7 @@ class Batch extends Model<IBatch> implements IBatch {
     public createdBy!: string;
     public isActive!: boolean;
     public description?: string;
+    public courseId?: string;
     public batchCode?: string | undefined;
     public batchYear?: string | undefined;
     public batchSemester?: string | undefined;
@@ -26,8 +26,8 @@ export const initBatchModel = (sequelize: Sequelize) => {
         },
         name: {
             type: DataTypes.STRING,
+            unique: true,
             allowNull: false,
-
         },
         isActive: {
             type: DataTypes.BOOLEAN,
@@ -37,16 +37,19 @@ export const initBatchModel = (sequelize: Sequelize) => {
             type: DataTypes.STRING,
             allowNull: true,
         },
+        courseId: {
+            type: DataTypes.UUID,
+            allowNull: true
+        },
         batchYear: {
             type: DataTypes.STRING,
             allowNull: true
         },
         batchCode: {
             type: DataTypes.STRING,
-            allowNull: true
-
+            unique: true,
+            allowNull: false
         },
-
         createdBy: {
             type: DataTypes.UUID,
             allowNull: false,
@@ -78,5 +81,9 @@ export const associateBatchModel = (models: any) => {
     models.Batch.belongsTo(models.User, {
         foreignKey: "createdBy",
         as: "batchCreator"
+    })
+    models.Batch.belongsTo(models.Course,{
+        foreignKey:"courseId",
+        as:"course"
     })
 }

@@ -6,6 +6,7 @@ class Course extends Model<ICourse> implements ICourse {
     public name!: string;
     public description?: string;
     public durationInYears?: number;
+    public courseCode!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 }
@@ -21,6 +22,7 @@ export const initCourseModel = (sequelize: Sequelize) => {
             name: {
                 type: DataTypes.STRING,
                 allowNull: false,
+                unique: true
             },
             description: {
                 type: DataTypes.STRING,
@@ -29,6 +31,10 @@ export const initCourseModel = (sequelize: Sequelize) => {
             durationInYears: {
                 type: DataTypes.INTEGER,
                 allowNull: true,
+            },
+            courseCode: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
             },
             createdAt: {
                 type: DataTypes.DATE,
