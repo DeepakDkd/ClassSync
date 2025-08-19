@@ -39,7 +39,7 @@ export const approveRequestService = async (data: any): Promise<any> => {
             reviewedBy: reviewedBy,
             respondedAt: respondedAt
         }, { where: { id: id, status: "pending" }, returning: true })
-
+        
         if (!updatedData) {
             throw new ApiError(404, "Request not found")
         }

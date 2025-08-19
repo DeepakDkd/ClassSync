@@ -7,8 +7,8 @@ const router = Router();
 
 router.route("/").get(getAllBatches);
 router.route("/:id").get(verifyJWT, getBatchById);
-router.route("/create-batch").post(verifyJWT, createBatch);
-router.route("/delete/:id").post(verifyJWT, deleteBatch);//not tested
+router.route("/create-batch/:id").post(verifyJWT, createBatch);
+router.route("/delete/:id").post(verifyJWT, deleteBatch);
 
 
 

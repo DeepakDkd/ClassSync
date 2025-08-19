@@ -7,7 +7,7 @@ class Batch extends Model<IBatch> implements IBatch {
     public createdBy!: string;
     public isActive!: boolean;
     public description?: string;
-    public courseId?: string;
+    public courseId!: string;
     public batchCode?: string | undefined;
     public batchYear?: string | undefined;
     public batchSemester?: string | undefined;

@@ -33,7 +33,7 @@ export const initCourseModel = (sequelize: Sequelize) => {
                 allowNull: true,
             },
             courseCode: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.STRING,
                 allowNull: false,
             },
             createdAt: {

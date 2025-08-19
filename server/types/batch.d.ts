@@ -6,7 +6,7 @@ export interface IBatch {
   endDate?: Date;
   createdBy: string;
   isActive?: boolean;
-  courseId?: string;
+  courseId: string;
   subjectIds?: string[];
   batchCode?: string;
   batchYear?: string;

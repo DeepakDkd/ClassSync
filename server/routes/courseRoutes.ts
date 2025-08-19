@@ -13,6 +13,6 @@ router.route("/delete/:id").post(verifyJWT, deleteCourse);
 
 router.route("/create-specialization/:id").post(verifyJWT, createSpecialization);
 router.route("/delete-specialization/:id").post(verifyJWT, deleteSpecialization);
-router.route("/get-specialization/:id").get(verifyJWT, getSpecialization)
+router.route("/get-specialization/:id").get(verifyJWT, getSpecialization);
 
 export default router;

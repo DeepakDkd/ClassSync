@@ -6,7 +6,8 @@ import ApiResponse from "../utils/ApiResponse";
 
 export const createBatch = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const id = req?.user?.id;
-    const batchData = { createdBy: id, ...req.body };
+    const courseId = req.params.id;
+    const batchData = { createdBy: id, courseId: courseId, ...req.body };
     if (!id)
         throw new ApiError(400, "User Id not found")
 
