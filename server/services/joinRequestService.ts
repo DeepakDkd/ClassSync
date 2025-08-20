@@ -2,14 +2,15 @@ import db from "../model"
 import { IJoinRequest } from "../types/JoinRequest"
 import { ApiError } from "../utils/ApiError"
 
-export const joinRequestService = async ({ batchId, studentId }: { batchId: string, studentId: string }): Promise<IJoinRequest> => {
+export const joinRequestService = async (data: IJoinRequest): Promise<IJoinRequest> => {
     try {
-        const data: any = { batchId: batchId, studentId: studentId }
+        const batchId = data.batchId
         if (!batchId) {
             throw new ApiError(400, "Batch Id is required")
         }
         const batch = await db.Batch.findByPk(batchId)
         if (!batch) {
+            console.log("Batch not found")
             throw new ApiError(404, "Batch not found")
         }
         const request = await db.JoinRequest.create({ ...data })
@@ -27,22 +28,29 @@ export const approveRequestService = async (data: any): Promise<any> => {
 
     try {
 
-        const { id, batchId, studentId, status, reviewedBy } = data;
+        const { id,  status, reviewedBy } = data;
         if (!id) {
             throw new ApiError(400, "Request Id if required")
         }
         const respondedAt = new Date();
-        const [_,updatedData] = await db.JoinRequest.update({
+        const [_, updatedData] = await db.JoinRequest.update({
             status: status,
             reviewedBy: reviewedBy,
             respondedAt: respondedAt
         }, { where: { id: id, status: "pending" }, returning: true })
-        
         if (!updatedData) {
             throw new ApiError(404, "Request not found")
         }
 
-        return updatedData;
+        const [x, updatedUser] = await db.User.update({
+            batchId: data.batchId,
+            courseId: data.courseId,
+        }, {
+            where: {
+                id: data.studentId
+            }, returning: true
+        })
+        return updatedUser[0];
 
 
     } catch (error: any) {
@@ -71,13 +79,13 @@ export const getAllRequestService = async (): Promise<IJoinRequest[]> => {
 
     try {
         const requests = await db.JoinRequest.findAll({ where: { status: "pending" } })
+        console.log(requests)
 
         if (!requests) {
+            console.log("Request not found")
             throw new ApiError(404, "Requests not found")
         }
-
         return requests;
-
 
     } catch (error: any) {
         console.log("Failed to get all Join request", error)

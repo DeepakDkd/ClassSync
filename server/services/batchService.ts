@@ -1,7 +1,6 @@
 import { DataTypes, where } from "sequelize";
 import db from "../model";
 import { IBatch } from "../types/batch";
-import { IJoinRequest } from "../types/JoinRequest";
 import { ApiError } from "../utils/ApiError";
 
 export const createBatchService = async (data: IBatch): Promise<IBatch> => {

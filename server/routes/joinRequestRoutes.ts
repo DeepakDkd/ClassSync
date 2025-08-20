@@ -6,8 +6,8 @@ import { approveRequest, deleteJoinRequest, getAllJoinRequest, joinRequest } fro
 const router = Router();
 
 router.route("/:id").post(verifyJWT, joinRequest);
+router.route("/get-all").get(verifyJWT, getAllJoinRequest);//not tested
 router.route("/approve-join-request/:id").post(verifyJWT, approveRequest);
 router.route("/delete/:id").post(verifyJWT, deleteJoinRequest);//not tested
-router.route("/join-requests").get(verifyJWT, getAllJoinRequest);//not tested
 
 export default router;

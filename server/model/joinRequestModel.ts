@@ -5,6 +5,7 @@ class JoinRequest extends Model<IJoinRequest> implements IJoinRequest {
   public id!: string;
   public batchId!: string;
   public studentId!: string;
+  public courseId!: string;
   public status!: 'pending' | 'approved' | 'rejected';
   public requestedAt!: Date;
   public respondedAt?: Date;
@@ -28,6 +29,10 @@ export const initJoinRequestModel = (sequelize: Sequelize) => {
         allowNull: false,
       },
       studentId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      courseId: {
         type: DataTypes.UUID,
         allowNull: false,
       },
