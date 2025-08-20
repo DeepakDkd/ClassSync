@@ -52,7 +52,6 @@ export const approveRequestService = async (data: any): Promise<any> => {
         })
         return updatedUser[0];
 
-
     } catch (error: any) {
         console.log("Join request failed to batch", error)
         throw new ApiError(500, "Join request failed to batch ", [error.message || error])
