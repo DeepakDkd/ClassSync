@@ -26,14 +26,12 @@ export const joinRequestService = async ({ batchId, studentId }: { batchId: stri
 export const approveRequestService = async (data: any): Promise<any> => {
 
     try {
-        console.log("Dataaa", data)
 
         const { id, batchId, studentId, status, reviewedBy } = data;
         if (!id) {
             throw new ApiError(400, "Request Id if required")
         }
         const respondedAt = new Date();
-        console.log("Time::::", respondedAt)
         const [_,updatedData] = await db.JoinRequest.update({
             status: status,
             reviewedBy: reviewedBy,

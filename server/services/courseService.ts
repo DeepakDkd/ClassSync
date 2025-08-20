@@ -11,6 +11,7 @@ export const createCourseService = async (course: ICourse): Promise<ICourse> => 
         }
         const newCourse = await db.Course.create({ ...course });
         if (!newCourse) {
+            console.log("Failed to create course");
             throw new ApiError(500, `Failed to create course ${course}`)
         }
 
