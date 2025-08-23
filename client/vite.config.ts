@@ -1,3 +1,4 @@
+import path from "path"
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import checker from 'vite-plugin-checker'
@@ -10,4 +11,9 @@ export default defineConfig({
     checker({ typescript: true }),
     tailwindcss()
   ],
+  resolve: { 
+    alias: {
+       "@": path.resolve(__dirname, "./src"), 
+      },
+   },
 })
