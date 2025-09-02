@@ -27,7 +27,7 @@ export const getAllBatches = asyncHandler(async (req: Request, res: Response): P
 })
 
 export const getBatchById = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    const id = req.params.id;
+    const id = req.params.id; 
     if (!id)
         throw new ApiError(400, "Batch Id not found")
 
