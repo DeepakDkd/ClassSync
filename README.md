@@ -1,5 +1,4 @@
-# Write a comprehensive README.md for the Smart Classroom & Timetable Scheduler project
-readme = ## Smart Classroom & Timetable Scheduler
+# Smart Classroom & Timetable Scheduler
 
 **ID:** SIH25028 • **Theme:** Smart Education • **Category:** Software  
 Build a practical, AI‑assisted platform that helps institutes **create conflict‑free timetables** and **boost learning** with batch groups, auto‑quizzes, and leaderboards.
